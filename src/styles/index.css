@@ -1,0 +1,162 @@
+@import '@fontsource-variable/archivo/wdth.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-forest: #173f35;
+  --color-forest-2: #1f5244;
+  --color-leaf: #8dbf75;
+  --color-leaf-ink: #3b6a2c;
+  --color-leaf-wash: #e5efd9;
+  --color-cream: #f7f4ec;
+  --color-paper: #fffefa;
+  --color-terracotta: #d98566;
+  --color-terracotta-ink: #9c4a2b;
+  --color-terracotta-wash: #f6e2d8;
+  --color-ink: #252c28;
+  --color-ink-2: #4f5a53;
+  --color-rule: #d9d6c8;
+  --color-rule-strong: #b9b6a4;
+
+  --radius-box: 10px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* iOS-like sheet curve */
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    /* Keep anchors and focused fields clear of the sticky masthead. */
+    scroll-padding-top: 5rem;
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-variation-settings: 'wdth' 100;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+    scrollbar-color: var(--color-rule-strong) var(--color-cream);
+  }
+  body {
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: var(--color-leaf);
+    color: var(--color-forest);
+  }
+  input,
+  textarea,
+  select {
+    caret-color: var(--color-forest);
+    font-size: max(16px, 1em);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-leaf);
+  }
+  a {
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  button {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+@utility display {
+  font-variation-settings: 'wdth' 82;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+
+@utility condensed {
+  font-variation-settings: 'wdth' 80;
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* The circular's shared-edge module grid: boxes share hairlines rather than floating as cards. */
+@utility modules {
+  display: grid;
+  gap: 1px;
+  /* Paper ground + per-module outline: shared hairlines, and empty trailing cells stay paper. */
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-box);
+  overflow: hidden;
+}
+
+@utility module {
+  background: var(--color-paper);
+  padding: 1.25rem;
+  box-shadow: 0 0 0 1px var(--color-rule);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes roll-in {
+  from {
+    transform: translateY(0.6em);
+    opacity: 0;
+    filter: blur(2px);
+  }
+  to {
+    transform: none;
+    opacity: 1;
+    filter: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
