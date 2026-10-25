@@ -89,7 +89,7 @@ function PickerBody({ target, onClose }: { target: PickTarget; onClose: () => vo
       ) : (
         <ul className="modules">
           {shown.map((m) => {
-            const required = m.lines.filter((l) => !l.item.optional && !l.staple).length
+            const required = m.lines.filter((l) => !l.item.optional).length
             const have = Math.round(m.coverage * required)
             const isCurrent = current && !current.leftover && current.recipeId === m.recipe.id
             return (

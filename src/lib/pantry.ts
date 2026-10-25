@@ -48,16 +48,16 @@ export function expiringSoon(items: PantryItem[], withinDays = 7): (PantryItem &
 
 /** Merge new items into an existing list, summing quantities for the same ingredient + unit. */
 export function mergeItems(existing: PantryItem[], incoming: PantryItem[]): PantryItem[] {
-  const out = existing.map((i) => ({ ...i }))
-  for (const inc of incoming) {
-    const match = out.find((o) => o.ingredientId === inc.ingredientId && o.unit === inc.unit)
-    if (match) {
-      match.quantity = Math.round((match.quantity + inc.quantity) * 100) / 100
-      match.demo = match.demo && inc.demo
-      if (inc.expiresAt && (!match.expiresAt || inc.expiresAt < match.expiresAt)) match.expiresAt = inc.expiresAt
-    } else out.push({ ...inc })
-  }
-  return out
+  return incoming.reduce<PantryItem[]>((items, inc) => {
+    const index = items.findIndex((item) => item.ingredientId === inc.ingredientId && item.unit === inc.unit)
+    if (index === -1) return [...items, { ...inc }]
+    return items.map((item, position) => position !== index ? item : {
+      ...item,
+      quantity: Math.round((item.quantity + inc.quantity) * 100) / 100,
+      demo: Boolean(item.demo || inc.demo),
+      expiresAt: inc.expiresAt && (!item.expiresAt || inc.expiresAt < item.expiresAt) ? inc.expiresAt : item.expiresAt,
+    })
+  }, existing.map((item) => ({ ...item })))
 }
 
 export function pantryValue(items: PantryItem[]): number {

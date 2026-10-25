@@ -28,7 +28,7 @@ export interface RecipeMatch {
   recipe: Recipe
   servings: number
   lines: LineMatch[]
-  /** fraction of required (non-optional, non-staple) ingredients fully on hand */
+  /** fraction of required (non-optional) ingredients fully on hand */
   coverage: number
   canMake: boolean
   missingRequired: LineMatch[]
@@ -39,6 +39,9 @@ export interface RecipeMatch {
   vegServings: number
 }
 
+/** Base-unit tolerance for floating-point conversion only. */
+export const QUANTITY_EPSILON = 1e-7
+
 const per100 = (base: number) => base / 100
 
 export function lineBase(item: RecipeIngredient, scale: number): number {
@@ -47,28 +50,30 @@ export function lineBase(item: RecipeIngredient, scale: number): number {
 }
 
 /** Deterministically match a recipe against on-hand stock (base units). */
-export function matchRecipe(recipe: Recipe, stock: Record<string, number>, servings = recipe.servings): RecipeMatch {
+export function matchRecipe(recipe: Recipe, stock: Record<string, number>, servings = recipe.servings, includeOptional = true): RecipeMatch {
   const scale = servings / recipe.servings
   const remaining = { ...stock }
-  const lines: LineMatch[] = recipe.ingredients.map((item) => {
+  const allocated = new Map<RecipeIngredient, LineMatch>()
+  // Required lines have priority, even when optional lines appear first.
+  for (const item of [...recipe.ingredients.filter(i => !i.optional), ...recipe.ingredients.filter(i => i.optional)]) {
     const ing = INGREDIENT_BY_ID[item.ingredientId]
     const need = lineBase(item, scale)
-    const staple = !!ing.staple
-    const avail = staple ? need : Math.max(0, remaining[item.ingredientId] ?? 0)
-    const have = Math.min(avail, need)
-    if (!staple) remaining[item.ingredientId] = avail - have
-    const missing = Math.max(0, need - have)
-    return { item, need, have, missing, staple, missingCost: per100(missing) * ing.pricePerBase }
-  })
-
-  const required = lines.filter((l) => !l.item.optional && !l.staple)
-  const missingRequired = required.filter((l) => l.missing > 0.5)
+    const avail = item.optional && !includeOptional ? 0 : Math.max(0, remaining[item.ingredientId] ?? 0)
+    const have = item.optional && avail + QUANTITY_EPSILON < need ? 0 : Math.min(avail, need)
+    remaining[item.ingredientId] = avail - have
+    const deficit = Math.max(0, need - have)
+    const missing = deficit <= QUANTITY_EPSILON ? 0 : deficit
+    allocated.set(item, { item, need, have, missing, staple: !!ing.staple, missingCost: per100(missing) * ing.pricePerBase })
+  }
+  const lines = recipe.ingredients.map(item => allocated.get(item)!)
+  const required = lines.filter(l => !l.item.optional)
+  const missingRequired = required.filter(l => l.missing > QUANTITY_EPSILON)
   const coverage = required.length ? (required.length - missingRequired.length) / required.length : 1
   const additionalCost = missingRequired.reduce((s, l) => s + l.missingCost, 0)
   const totalCost = lines.filter((l) => !l.item.optional).reduce((s, l) => s + per100(l.need) * INGREDIENT_BY_ID[l.item.ingredientId].pricePerBase, 0)
 
   // Nutrition: required ingredients plus optional ones the household actually has.
-  const counted = lines.filter((l) => !l.item.optional || l.have >= l.need)
+  const counted = lines.filter((l) => !l.item.optional || l.have + QUANTITY_EPSILON >= l.need)
   const sum = { kcal: 0, protein: 0, fiber: 0 }
   let produceGrams = 0
   for (const l of counted) {
@@ -118,9 +123,9 @@ export function applyFilters(matches: RecipeMatch[], active: Set<FilterId>, quer
 export function substitutionsFor(m: RecipeMatch, stock: Record<string, number>): { from: string; to: string; note: string }[] {
   const out: { from: string; to: string; note: string }[] = []
   for (const l of m.lines) {
-    if (l.missing <= 0.5 || l.staple) continue
+    if (l.missing <= QUANTITY_EPSILON || l.item.optional) continue
     const sub = SUBSTITUTIONS.find((s) => s.from === l.item.ingredientId)
-    const to = sub?.to.find((id) => (stock[id] ?? 0) > 0 || INGREDIENT_BY_ID[id]?.staple)
+    const to = sub?.to.find((id) => (stock[id] ?? 0) > QUANTITY_EPSILON)
     if (sub && to) out.push({ from: l.item.ingredientId, to, note: sub.note })
   }
   return out

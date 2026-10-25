@@ -2,7 +2,7 @@ import { INGREDIENT_BY_ID } from '../data/ingredients'
 import { RECIPES, RECIPE_BY_ID } from '../data/recipes'
 import type { Budget, MealSlot, PantryItem, PlanEntry, WeekPlan } from '../types'
 import { daysUntil, stockMap } from './pantry'
-import { matchRecipe, type RecipeMatch } from './recipeMatching'
+import { matchRecipe, QUANTITY_EPSILON, type RecipeMatch } from './recipeMatching'
 
 export const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const
 export const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const
@@ -42,8 +42,8 @@ export function iterPlan(plan: WeekPlan): { day: number; slot: MealSlot; entry: 
 }
 
 /** Walk the week in order, drawing each meal's ingredients from what is left in the pantry. */
-export function analyzePlan(plan: WeekPlan, pantry: PantryItem[]): PlanAnalysis {
-  const start = stockMap(pantry)
+export function analyzePlan(plan: WeekPlan, pantry: PantryItem[], resources: { safeWater?: boolean } = {}): PlanAnalysis {
+  const start: Record<string, number> = { ...stockMap(pantry), ...(resources.safeWater ? { water: Number.MAX_SAFE_INTEGER } : {}) }
   const remaining = { ...start }
   const shopping = new Map<string, ShoppingLine>()
   const meals: PlannedMeal[] = []
@@ -56,11 +56,10 @@ export function analyzePlan(plan: WeekPlan, pantry: PantryItem[]): PlanAnalysis 
       continue
     }
     const recipe = RECIPE_BY_ID[entry.recipeId]
-    const match = matchRecipe(recipe, remaining, entry.servings)
+    const match = matchRecipe(recipe, remaining, entry.servings, false)
     for (const l of match.lines) {
-      if (l.staple) continue
       remaining[l.item.ingredientId] = Math.max(0, (remaining[l.item.ingredientId] ?? 0) - l.have)
-      if (l.missing > 0.5 && !l.item.optional) {
+      if (l.missing > QUANTITY_EPSILON && !l.item.optional) {
         const cur = shopping.get(l.item.ingredientId) ?? { ingredientId: l.item.ingredientId, base: 0, cost: 0, forRecipes: [] }
         cur.base += l.missing
         cur.cost += l.missingCost
@@ -100,7 +99,7 @@ export function suggestWeek(pantry: PantryItem[], household: number, opts: { max
     let best: { m: RecipeMatch; score: number } | null = null
     for (const r of RECIPES) {
       if (!r.meal.includes(slot)) continue
-      const m = matchRecipe(r, remaining, Math.max(household, slot === 'dinner' ? r.servings : household))
+      const m = matchRecipe(r, remaining, Math.max(household, slot === 'dinner' ? r.servings : household), false)
       if (opts.maxAddedPerMeal != null && m.additionalCost > opts.maxAddedPerMeal) continue
       const usesSoon = m.lines.filter((l) => soon.has(l.item.ingredientId) && l.have > 0).length
       const repeats = used.get(r.id) ?? 0
@@ -121,7 +120,7 @@ export function suggestWeek(pantry: PantryItem[], household: number, opts: { max
       if (!m) continue
       plan[day][slot] = { recipeId: m.recipe.id, servings: m.servings }
       used.set(m.recipe.id, (used.get(m.recipe.id) ?? 0) + 1)
-      for (const l of m.lines) if (!l.staple) remaining[l.item.ingredientId] = Math.max(0, (remaining[l.item.ingredientId] ?? 0) - l.have)
+      for (const l of m.lines) remaining[l.item.ingredientId] = Math.max(0, (remaining[l.item.ingredientId] ?? 0) - l.have)
       if (slot === 'dinner') leftoverFrom = m.servings - household >= household ? { recipeId: m.recipe.id, servings: household } : null
     }
     // Lunch tomorrow from tonight's extra servings.
@@ -139,13 +138,13 @@ export function cheaperSwaps(plan: WeekPlan, pantry: PantryItem[]) {
   for (const { day, slot, entry } of iterPlan(plan)) {
     if (entry.leftover) continue
     const before = { ...remaining }
-    const current = matchRecipe(RECIPE_BY_ID[entry.recipeId], before, entry.servings)
-    for (const l of current.lines) if (!l.staple) remaining[l.item.ingredientId] = Math.max(0, (remaining[l.item.ingredientId] ?? 0) - l.have)
+    const current = matchRecipe(RECIPE_BY_ID[entry.recipeId], before, entry.servings, false)
+    for (const l of current.lines) remaining[l.item.ingredientId] = Math.max(0, (remaining[l.item.ingredientId] ?? 0) - l.have)
     if (current.additionalCost < 0.5) continue
     let best: { id: string; cost: number } | null = null
     for (const r of RECIPES) {
       if (r.id === entry.recipeId || !r.meal.includes(slot)) continue
-      const m = matchRecipe(r, before, entry.servings)
+      const m = matchRecipe(r, before, entry.servings, false)
       if (m.additionalCost < current.additionalCost - 0.5 && (!best || m.additionalCost < best.cost)) best = { id: r.id, cost: m.additionalCost }
     }
     if (best) swaps.push({ day, slot, from: entry.recipeId, to: best.id, saves: current.additionalCost - best.cost })

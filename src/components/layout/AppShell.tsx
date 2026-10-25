@@ -100,6 +100,9 @@ export function AppShell() {
       <main id="main" className="mx-auto max-w-[1440px] px-4 pb-28 pt-6 sm:px-6 lg:pb-16 lg:pt-8">
         <Outlet />
       </main>
+      <footer className="mx-auto max-w-[1440px] px-4 pb-24 text-sm text-ink-2 sm:px-6 lg:pb-6">
+        <NavLink to="/privacy" className="inline-flex min-h-11 items-center font-semibold text-forest underline">Privacy &amp; storage</NavLink>
+      </footer>
       <MobileNav />
       <Toaster />
     </div>

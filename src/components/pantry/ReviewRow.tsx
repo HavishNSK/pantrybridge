@@ -7,14 +7,15 @@ import { IconButton } from '../ui/Button'
 import { Input, Select } from '../ui/Field'
 import { IngredientCombobox } from './IngredientCombobox'
 import { prefillExpiry } from './dates'
-import { nameInputId, qtyOk, type DraftRow } from './scanDraft'
+import { dateOk, nameInputId, qtyOk, type DraftRow } from './scanDraft'
 
 export function ReviewRow({ row, onChange, onRemove }: { row: DraftRow; onChange: (patch: Partial<DraftRow>) => void; onRemove: () => void }) {
   const ing = row.ingredientId ? INGREDIENT_BY_ID[row.ingredientId] : undefined
   const units: Unit[] = ing ? unitsFor(ing) : UNITS
   const label = row.text.trim() || 'new item'
   const nameErr = !row.touched ? null : !row.text.trim() ? 'Name an ingredient, or remove this row.' : !ing ? `We don't recognize "${row.text.trim()}". Pick the closest match from the list.` : null
-  const qtyErr = qtyOk(row.quantity) ? null : 'Enter an amount above zero.'
+  const qtyErr = qtyOk(row.quantity) ? null : 'Enter an amount from 0.005 to 1,000,000.'
+  const dateErr = dateOk(row.expiresAt) ? null : 'Enter a valid use-by date, or leave it blank.'
   const errId = `rev-${row.key}-err`
 
   const pick = (next: Ingredient) => {
@@ -31,6 +32,7 @@ export function ReviewRow({ row, onChange, onRemove }: { row: DraftRow; onChange
   return (
     <li className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-2 py-3 md:grid-cols-[minmax(0,1fr)_88px_108px_156px_40px] md:items-start">
       <div className="min-w-0">
+        {row.sourceText && <p className="mb-1 text-xs text-ink-2">Sample receipt: {row.sourceText}</p>}
         <IngredientCombobox
           id={nameInputId(row.key)}
           ariaLabel="Ingredient name"
@@ -58,9 +60,11 @@ export function ReviewRow({ row, onChange, onRemove }: { row: DraftRow; onChange
 
       <div className="col-span-2 grid grid-cols-[88px_minmax(0,1fr)_minmax(0,1.4fr)] gap-2 md:col-span-3 md:col-start-2 md:row-start-1 md:grid-cols-[88px_108px_156px]">
         <Input
+          id={`rev-${row.key}-quantity`}
           type="number"
           inputMode="decimal"
-          min={0}
+          min={0.005}
+          max={1_000_000}
           step="any"
           aria-label={`Amount of ${label}`}
           aria-invalid={!!qtyErr || undefined}
@@ -75,13 +79,13 @@ export function ReviewRow({ row, onChange, onRemove }: { row: DraftRow; onChange
             <option key={u} value={u}>{UNIT_LABEL[u]}</option>
           ))}
         </Select>
-        <Input type="date" aria-label={`Use-by date for ${label} (optional)`} value={row.expiresAt} onChange={(e) => onChange({ expiresAt: e.target.value })} className="num min-w-0" />
+        <Input id={`rev-${row.key}-date`} aria-invalid={!!dateErr || undefined} aria-describedby={dateErr ? errId : undefined} type="date" aria-label={`Use-by date for ${label} (optional)`} value={row.expiresAt} onChange={(e) => onChange({ expiresAt: e.target.value })} className="num min-w-0" />
       </div>
 
-      {(nameErr || qtyErr) && (
+      {(nameErr || qtyErr || dateErr) && (
         <p id={errId} role="alert" className="col-span-2 flex items-start gap-1.5 text-sm font-medium text-terracotta-ink md:col-span-5">
           <AlertCircle size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
-          {[nameErr, qtyErr].filter(Boolean).join(' ')}
+          {[nameErr, qtyErr, dateErr].filter(Boolean).join(' ')}
         </p>
       )}
     </li>

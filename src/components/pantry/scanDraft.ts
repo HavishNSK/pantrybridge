@@ -15,6 +15,8 @@ export interface DraftRow {
   unit: Unit
   expiresAt: string
   /** name field has been left at least once, so we may flag it */
+  demo?: boolean
+  sourceText?: string
   touched: boolean
 }
 
@@ -27,6 +29,7 @@ export function rowFromItem(it: PantryItem): DraftRow {
     unit: it.unit,
     expiresAt: it.expiresAt ?? '',
     touched: true,
+    demo: it.demo,
   }
 }
 
@@ -34,16 +37,23 @@ export const emptyRow = (): DraftRow => ({ key: makeUid(), text: '', ingredientI
 
 export function qtyOk(q: string): boolean {
   const n = Number(q)
-  return q.trim() !== '' && Number.isFinite(n) && n > 0
+  return q.trim() !== '' && Number.isFinite(n) && n >= 0.005 && n <= 1_000_000
+}
+
+export function dateOk(date: string): boolean {
+  if (!date) return true
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) && !Number.isNaN(Date.parse(date)) && new Date(date).toISOString().slice(0, 10) === date
 }
 
 export function isValidRow(r: DraftRow): boolean {
   const ing = r.ingredientId ? INGREDIENT_BY_ID[r.ingredientId] : undefined
-  return !!ing && qtyOk(r.quantity) && unitsFor(ing).includes(r.unit)
+  return !!ing && qtyOk(r.quantity) && unitsFor(ing).includes(r.unit) && dateOk(r.expiresAt)
 }
 
 export function toPantryItem(r: DraftRow): PantryItem {
+  if (!isValidRow(r)) throw new Error('Correct the ingredient, quantity, unit, or date before saving.')
   return {
+    demo: r.demo,
     uid: makeUid(),
     ingredientId: r.ingredientId!,
     quantity: Math.round(Number(r.quantity) * 100) / 100,

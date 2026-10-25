@@ -14,9 +14,9 @@ import { DemoTag, EstimateTag, Tag } from '../components/ui/Tag'
 import { INGREDIENT_BY_ID } from '../data/ingredients'
 import { RECIPE_BY_ID } from '../data/recipes'
 import { money } from '../lib/format'
-import { matchRecipe, substitutionsFor, type LineMatch } from '../lib/recipeMatching'
+import { matchRecipe, substitutionsFor, QUANTITY_EPSILON, type LineMatch } from '../lib/recipeMatching'
 import { displayAmount, formatQty } from '../lib/units'
-import { isDemoPantry } from '../store/useStore'
+import { isDemoPantry, useStore } from '../store/useStore'
 import type { Equipment, Recipe } from '../types'
 
 const EQUIPMENT_LABEL: Record<Equipment, string> = {
@@ -54,15 +54,16 @@ export default function RecipeDetail() {
 }
 
 function Detail({ recipe }: { recipe: Recipe }) {
-  const { pantry, inPlan } = useAvailableStock(recipe.id)
-  const stock = useMemo(() => stockMap(pantry), [pantry])
+  const { pantry, inPlan, stock: reservedStock } = useAvailableStock(recipe.id)
+  const safeWater = useStore((s) => s.cookingPreferences.safeWater)
+  const stock = useMemo(() => inPlan ? reservedStock : ({ ...stockMap(pantry), ...(safeWater ? { water: Number.MAX_SAFE_INTEGER } : {}) }), [pantry, safeWater, inPlan, reservedStock])
   const [servings, setServings] = useState(recipe.servings)
   const [sheetOpen, setSheetOpen] = useState(false)
   const match = useMemo(() => matchRecipe(recipe, stock, servings), [recipe, stock, servings])
   const subs = useMemo(() => substitutionsFor(match, stock), [match, stock])
 
-  const inPantry = match.lines.filter((l) => l.staple || l.missing <= 0.5)
-  const toBuy = match.lines.filter((l) => !l.staple && l.missing > 0.5)
+  const inPantry = match.lines.filter((l) => l.missing <= QUANTITY_EPSILON)
+  const toBuy = match.lines.filter((l) => !l.item.optional && l.missing > QUANTITY_EPSILON)
   const nutrition = [
     { label: 'Calories', value: `${Math.round(match.perServing.kcal)}`, unit: 'kcal' },
     { label: 'Protein', value: `${Math.round(match.perServing.protein)}`, unit: 'g' },
@@ -111,7 +112,7 @@ function Detail({ recipe }: { recipe: Recipe }) {
 
           <CoverageBar match={match} />
           <p className="text-xs text-ink-2">
-            {inPlan ? 'This meal is already in your week plan. Amounts below count everything in your pantry.' : 'Amounts below count everything in your pantry.'}
+            {inPlan ? 'This meal is already in your week plan. Amounts below set aside ingredients reserved for your other recipes.' : 'Amounts below count everything in your pantry.'}
           </p>
 
           <Button size="lg" icon={<CalendarPlus size={18} />} onClick={() => setSheetOpen(true)} className="self-start">

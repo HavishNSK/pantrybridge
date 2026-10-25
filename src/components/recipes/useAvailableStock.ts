@@ -11,6 +11,7 @@ import type { WeekPlan } from '../../types'
 export function useAvailableStock(exceptRecipeId?: string) {
   const pantry = useStore((s) => s.pantry)
   const plan = useStore((s) => s.plan)
+  const safeWater = useStore((s) => s.cookingPreferences.safeWater)
   const stock = useMemo(() => {
     let p: WeekPlan = plan
     if (exceptRecipeId) {
@@ -18,8 +19,8 @@ export function useAvailableStock(exceptRecipeId?: string) {
         Object.entries(plan).map(([day, slots]) => [day, Object.fromEntries(Object.entries(slots ?? {}).filter(([, e]) => e?.recipeId !== exceptRecipeId))]),
       )
     }
-    return analyzePlan(p, pantry).remaining
-  }, [plan, pantry, exceptRecipeId])
+    return analyzePlan(p, pantry, { safeWater }).remaining
+  }, [plan, pantry, exceptRecipeId, safeWater])
   const inPlan = !!exceptRecipeId && Object.values(plan).some((slots) => Object.values(slots ?? {}).some((e) => e?.recipeId === exceptRecipeId))
   return { stock, pantry, plan, planned: plannedCount(plan), inPlan }
 }

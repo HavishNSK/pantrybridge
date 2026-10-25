@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { demoPantry, makeUid } from '../data/demoPantry'
+import { DEFAULT_COOKING_PREFERENCES, normalizeCookingPreferences, type CookingPreferences } from '../lib/dinnerPlanning'
 import { mergeItems } from '../lib/pantry'
 import { suggestWeek } from '../lib/planner'
 import type { Budget, ListItem, MealSlot, PantryItem, PlanEntry, WeekPlan } from '../types'
@@ -10,6 +11,7 @@ interface State {
   plan: WeekPlan
   household: number
   budget: Budget | null
+  cookingPreferences: CookingPreferences
   /** ingredient ids ticked off the generated shopping list */
   checked: string[]
   extras: ListItem[]
@@ -30,6 +32,7 @@ interface State {
 
   setHousehold: (n: number) => void
   setBudget: (b: Budget | null) => void
+  setCookingPreferences: (preferences: CookingPreferences) => void
   toggleChecked: (id: string) => void
   addExtra: (name: string, food: boolean) => void
   toggleExtra: (id: string) => void
@@ -48,12 +51,13 @@ export const useStore = create<State>()(
       plan: suggestWeek(initialPantry, 3),
       household: 3,
       budget: null,
+      cookingPreferences: normalizeCookingPreferences(DEFAULT_COOKING_PREFERENCES),
       checked: [],
       extras: [],
       onboarded: false,
 
-      addItems: (items) => set((s) => ({ pantry: mergeItems(s.pantry, items.map((i) => ({ ...i, demo: false }))), onboarded: true })),
-      updateItem: (uid, patch) => set((s) => ({ pantry: s.pantry.map((p) => (p.uid === uid ? { ...p, ...patch, demo: false } : p)) })),
+      addItems: (items) => set((s) => ({ pantry: mergeItems(s.pantry, items), onboarded: true })),
+      updateItem: (uid, patch) => set((s) => ({ pantry: s.pantry.map((p) => (p.uid === uid ? { ...p, ...patch, demo: Boolean(p.demo || patch.demo) } : p)) })),
       removeItem: (uid) => set((s) => ({ pantry: s.pantry.filter((p) => p.uid !== uid) })),
       restoreItem: (item, index) =>
         set((s) => {
@@ -82,6 +86,7 @@ export const useStore = create<State>()(
 
       setHousehold: (n) => set({ household: Math.max(1, Math.min(12, n)) }),
       setBudget: (budget) => set({ budget }),
+      setCookingPreferences: (preferences) => set({ cookingPreferences: normalizeCookingPreferences(preferences) }),
       toggleChecked: (id) => set((s) => ({ checked: s.checked.includes(id) ? s.checked.filter((c) => c !== id) : [...s.checked, id] })),
       addExtra: (name, food) => set((s) => ({ extras: [...s.extras, { id: makeUid(), name, food, done: false }] })),
       toggleExtra: (id) => set((s) => ({ extras: s.extras.map((e) => (e.id === id ? { ...e, done: !e.done } : e)) })),
@@ -89,9 +94,9 @@ export const useStore = create<State>()(
 
       resetDemo: () => {
         const pantry = demoPantry()
-        set({ pantry, plan: suggestWeek(pantry, 3), household: 3, budget: null, checked: [], extras: [], onboarded: false })
+        set({ pantry, plan: suggestWeek(pantry, 3), household: 3, budget: null, cookingPreferences: normalizeCookingPreferences(DEFAULT_COOKING_PREFERENCES), checked: [], extras: [], onboarded: false })
       },
-      clearAll: () => set({ pantry: [], plan: {}, household: 3, budget: null, checked: [], extras: [], onboarded: true }),
+      clearAll: () => set({ pantry: [], plan: {}, household: 3, budget: null, cookingPreferences: normalizeCookingPreferences(DEFAULT_COOKING_PREFERENCES), checked: [], extras: [], onboarded: true }),
     }),
     {
       name: 'pantrybridge:v1',
@@ -103,7 +108,11 @@ export const useStore = create<State>()(
           return sessionStorage
         }
       }),
-      partialize: ({ pantry, plan, household, budget, checked, extras, onboarded }) => ({ pantry, plan, household, budget, checked, extras, onboarded }),
+      partialize: ({ pantry, plan, household, budget, cookingPreferences, checked, extras, onboarded }) => ({ pantry, plan, household, budget, cookingPreferences, checked, extras, onboarded }),
+      merge: (persisted, current) => {
+        const saved = persisted && typeof persisted === 'object' ? persisted as Partial<State> : {}
+        return { ...current, ...saved, cookingPreferences: normalizeCookingPreferences(saved.cookingPreferences) }
+      },
     },
   ),
 )

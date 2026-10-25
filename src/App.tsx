@@ -12,6 +12,7 @@ const Planner = lazy(() => import('./pages/Planner'))
 const Nutrition = lazy(() => import('./pages/Nutrition'))
 const Support = lazy(() => import('./pages/Support'))
 const Settings = lazy(() => import('./pages/Settings'))
+const Privacy = lazy(() => import('./pages/Privacy'))
 
 function PageFallback() {
   return (
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: '/nutrition', element: wrap(<Nutrition />) },
       { path: '/support', element: wrap(<Support />) },
       { path: '/settings', element: wrap(<Settings />) },
+      { path: '/privacy', element: wrap(<Privacy />) },
       { path: '*', element: <NotFound /> },
     ],
   },

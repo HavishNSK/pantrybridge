@@ -1,5 +1,6 @@
 import { HardDrive, RotateCcw, Trash2 } from 'lucide-react'
 import { useId, useRef, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { writeSupportCounty } from '../components/support/countyStorage'
 import { Button, buttonClass } from '../components/ui/Button'
 import { ModuleTitle, PageHeader } from '../components/ui/Section'
@@ -89,11 +90,12 @@ export default function Settings() {
           <ModuleTitle id="s-stored">What's stored</ModuleTitle>
           <p className="flex gap-2 text-[15px] leading-relaxed text-ink">
             <HardDrive size={18} className="mt-0.5 shrink-0 text-forest" aria-hidden="true" />
-            Everything stays only on this device, in this browser: your pantry list, week plan, budget, shopping list, household size, and the county you last picked on Find Food Support.
+            Everything stays only on this device, in this browser: your pantry list, week plan, budget, shopping list, household size, cooking preferences, and the county you last picked on Find Food Support.
           </p>
           <p className="mt-2 text-sm leading-relaxed text-ink-2">
-            Nothing is sent to a server. PantryBridge never asks for an EBT card number, PIN, or any account login. Photos you scan are not uploaded or analyzed.
+            Your saved app data is not sent to a server by this demo. PantryBridge never asks for an EBT card number, PIN, or any account login. Photos you scan are not uploaded or analyzed.
           </p>
+          <Link to="/privacy" className="mt-2 inline-flex min-h-11 items-center font-semibold text-forest underline">Read privacy &amp; storage information</Link>
         </section>
 
         <section className="module md:col-span-2" aria-labelledby="s-data">
@@ -104,7 +106,7 @@ export default function Settings() {
               <ConfirmAction
                 label="Reset demo data"
                 icon={<RotateCcw size={17} aria-hidden="true" />}
-                prompt="Replace your pantry, plan, and budget with the sample data?"
+                prompt="Replace your pantry, plan, budget, and preferences with the sample data? Your saved county stays unchanged."
                 confirmLabel="Yes, reset"
                 onConfirm={() => {
                   resetDemo()
@@ -117,7 +119,7 @@ export default function Settings() {
               <ConfirmAction
                 label="Clear all my data"
                 icon={<Trash2 size={17} aria-hidden="true" />}
-                prompt="Delete your pantry, plan, budget, lists, and saved county from this device? This can't be undone."
+                prompt="Delete your pantry, plan, budget, lists, and saved county, and reset preferences in this browser? This can't be undone."
                 confirmLabel="Yes, clear everything"
                 onConfirm={() => {
                   clearAll()

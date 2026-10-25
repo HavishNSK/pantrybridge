@@ -1,0 +1,7 @@
+{
+  "files": [
+    { "path": "AGENTS.md", "description": "Repository engineering and review requirements" },
+    { "path": "PRODUCT.md", "description": "Product constraints, demo honesty, and simplified user flow" },
+    { "path": "src/types/index.ts", "description": "Inventory, recipe, and planning domain contracts" }
+  ]
+}

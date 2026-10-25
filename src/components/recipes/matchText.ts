@@ -2,7 +2,7 @@ import { INGREDIENT_BY_ID } from '../../data/ingredients'
 import type { RecipeMatch } from '../../lib/recipeMatching'
 
 export function coverageCounts(m: RecipeMatch) {
-  const total = m.lines.filter((l) => !l.item.optional && !l.staple).length
+  const total = m.lines.filter((l) => !l.item.optional).length
   return { have: total - m.missingRequired.length, total }
 }
 

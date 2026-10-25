@@ -23,7 +23,8 @@ export function Overview() {
   const plan = useStore((s) => s.plan)
   const budget = useStore((s) => s.budget)
   const demo = isDemoPantry(pantry)
-  const analysis = useMemo(() => analyzePlan(plan, pantry), [plan, pantry])
+  const safeWater = useStore((s) => s.cookingPreferences.safeWater)
+  const analysis = useMemo(() => analyzePlan(plan, pantry, { safeWater }), [plan, pantry, safeWater])
   const soon = useMemo(() => expiringSoon(pantry, 7).slice(0, 5), [pantry])
   const today = todayIndex()
 
@@ -46,8 +47,8 @@ export function Overview() {
               Discover nourishing meals, stretch your grocery budget, and make every ingredient count.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <ButtonLink to="/scan" size="lg" icon={<ScanLine size={19} />}>Scan my pantry</ButtonLink>
-              <ButtonLink to="/planner" size="lg" variant="secondary" icon={<CalendarDays size={19} />}>Plan my week</ButtonLink>
+              <ButtonLink to="/scan" size="lg" icon={<ScanLine size={19} />}>Add food</ButtonLink>
+              <ButtonLink to="/planner#three-dinners" size="lg" variant="secondary" icon={<CalendarDays size={19} />}>Find three dinners</ButtonLink>
             </div>
           </div>
           <div className="relative mt-5 aspect-square sm:aspect-[4/3] lg:aspect-auto lg:min-h-[420px] lg:flex-1 border-t border-rule bg-cream">
@@ -93,7 +94,7 @@ function TonightModule({ today, plan, analysis }: { today: number; plan: Plan; a
                 <span className="num">Serves {entry.servings}</span>
                 {entry.leftover ? (
                   <Tag tone="have">Leftovers</Tag>
-                ) : meal?.match && meal.match.additionalCost < 0.5 ? (
+                ) : meal?.match && meal.match.canMake ? (
                   <Tag tone="have">All from your pantry</Tag>
                 ) : (
                   meal?.match && <Tag tone="price">+{money(meal.match.additionalCost)}</Tag>

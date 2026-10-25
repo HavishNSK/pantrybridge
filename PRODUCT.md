@@ -47,3 +47,17 @@ No testimonials, users, metrics, or partnerships exist. None may be fabricated. 
 
 ## Accessibility & Inclusion
 WCAG AA contrast, full keyboard operation, reduced-motion support, a WebGL fallback, mobile-first touch targets, and plain-language copy.
+
+
+## Food box and receipt demo
+
+The local intake flow offers synthetic food-box, receipt, and pantry samples with optional photo reference. Results never depend on the photo. All retained food rows need valid quantities before saving; nonfood sample receipt lines are excluded, and sample provenance remains labeled after confirmation and merges.
+
+The planner previews up to three distinct curated dinners scaled to household size, available recipe tools, maximum preparation time, safe-water confirmation, and either no shopping or a total additional grocery budget. Required staples need real stock. Shared stock and preserved plan deficits are accounted for. Preview changes require regeneration; a separate confirmation saves Monday–Wednesday dinners. Orphaned leftover lunches reserve ingredients as fresh meals when their source dinner is replaced. Planning is not a completed-cooking record.
+
+The initial curated subset contains three pot/stovetop dinners; tools, food, or time restrictions can yield fewer or zero meals. Real recognition, multilingual/audio guidance, QR box manifests, actual receipt-price costing, and cooked-meal inventory deductions are not implemented. The privacy/storage screen describes local behavior and credits General Legal's CC0 templates. Draft terms remain in project documentation pending owner review.
+
+
+## Simplified interaction
+
+The primary path is Add food → Find dinners → Save. Photo reference controls are optional and collapsed; one short demo explanation accompanies sample selection. Intake confirmation keeps validation and sample labels. Dinner setup shows the pot/stovetop requirement of the current curated recipes, time, safe water, and a no-shopping checkbox. The competing full-week suggestion action is removed from the planner screen. Calendar, weekly budgeting, and remaining pantry details expand on demand; shopping details appear after meals are planned or when manually added items exist. An empty shopping list remains available in a collapsed section. Save confirmation remains explicit.

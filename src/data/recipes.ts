@@ -1,7 +1,50 @@
 import type { Recipe, Substitution } from '../types'
 
 /** Hand-written pantry recipes. Quantities are for the listed servings. */
+export const DINNER_RECIPE_IDS = ['box-bean-rice', 'box-tomato-pasta', 'box-lentil-pot'] as const
+
+/** Small curated collection. Dry grain quantities; canned contents include liquid. */
+const BOX_DINNERS: Recipe[] = [
+  {
+    id: 'box-bean-rice', name: 'One-pot beans and rice',
+    blurb: 'White rice cooked with the full contents of a can of beans.',
+    minutes: 30, servings: 4, meal: ['dinner'], equipment: ['pot'],
+    ingredients: [
+      { ingredientId: 'rice', quantity: 300, unit: 'g', note: 'dry white rice' },
+      { ingredientId: 'black-beans', quantity: 425, unit: 'g', note: 'entire can including liquid' },
+      { ingredientId: 'water', quantity: 650, unit: 'ml' },
+    ],
+    steps: ['Put the dry white rice, entire can of beans including its liquid, and measured safe water in a lidded pot on a working heat source.', 'Bring to a boil, cover, and cook on low heat for 18–20 minutes until rice is tender and liquid absorbed. Remove from heat and rest covered for 5 minutes.', 'Stir and divide into four portions. No oil or seasoning is required.'],
+    art: { motif: 'bowl', colors: ['#886442', '#dad8ac', '#345441'] }, tags: ['curated dinner', 'vegetarian'],
+  },
+  {
+    id: 'box-tomato-pasta', name: 'One-pot tomato pasta',
+    blurb: 'Dry pasta simmers directly in tomatoes and measured water.',
+    minutes: 25, servings: 4, meal: ['dinner'], equipment: ['pot'],
+    ingredients: [
+      { ingredientId: 'pasta', quantity: 300, unit: 'g', note: 'dry short pasta' },
+      { ingredientId: 'diced-tomatoes', quantity: 822, unit: 'g', note: 'two cans including liquid' },
+      { ingredientId: 'water', quantity: 700, unit: 'ml' },
+    ],
+    steps: ['Combine dry short pasta, tomatoes including their liquid, and measured safe water in a pot on a working heat source.', 'Bring to a simmer, then cook uncovered 15–20 minutes, stirring frequently, until pasta is tender and the sauce thickens. Reduce heat if it starts sticking.', 'Divide into four portions. No draining, oil, or seasoning is required.'],
+    art: { motif: 'bowl', colors: ['#b65838', '#edd1a1', '#355b40'] }, tags: ['curated dinner', 'vegetarian'],
+  },
+  {
+    id: 'box-lentil-pot', name: 'Lentil and carrot pot',
+    blurb: 'A simple pot of dry lentils and finely diced carrots.',
+    minutes: 30, servings: 4, meal: ['dinner'], equipment: ['pot'],
+    ingredients: [
+      { ingredientId: 'lentils', quantity: 240, unit: 'g', note: 'dry lentils' },
+      { ingredientId: 'carrots', quantity: 240, unit: 'g' },
+      { ingredientId: 'water', quantity: 1200, unit: 'ml', note: '100 ml for rinsing; 1,100 ml for cooking' },
+    ],
+    steps: ['Sort dry lentils and rinse using 100 ml safe water, discarding the rinse water. Finely dice the carrots.', 'Combine lentils, carrots, and remaining 1,100 ml safe water in a pot on a working heat source. Bring to a boil, then simmer partly covered for 20–25 minutes until lentils and carrots are tender.', 'Serve the lentils with their cooking liquid in four bowls. No oil or seasoning is required.'],
+    art: { motif: 'bowl', colors: ['#9a7042', '#d9ad69', '#355b40'] }, tags: ['curated dinner', 'vegetarian'],
+  },
+]
+
 export const RECIPES: Recipe[] = [
+  ...BOX_DINNERS,
   {
     id: 'black-bean-chili',
     name: 'Black bean & corn chili',

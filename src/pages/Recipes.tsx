@@ -11,7 +11,7 @@ import { DemoTag } from '../components/ui/Tag'
 import { RECIPES } from '../data/recipes'
 import { money } from '../lib/format'
 import { applyFilters, FILTERS, matchRecipe, type FilterId, type RecipeMatch } from '../lib/recipeMatching'
-import { isDemoPantry } from '../store/useStore'
+import { isDemoPantry, useStore } from '../store/useStore'
 
 const VALID = new Set<string>(FILTERS.map((f) => f.id))
 const LABEL = Object.fromEntries(FILTERS.map((f) => [f.id, f.label])) as Record<FilterId, string>
@@ -30,7 +30,8 @@ export default function Recipes() {
   const reserve = params.get('reserve') === '1'
   const available = useAvailableStock()
   const { pantry, planned } = available
-  const stock = useMemo(() => (reserve ? available.stock : stockMap(pantry)), [reserve, available.stock, pantry])
+  const safeWater = useStore((s) => s.cookingPreferences.safeWater)
+  const stock = useMemo(() => (reserve ? available.stock : { ...stockMap(pantry), ...(safeWater ? { water: Number.MAX_SAFE_INTEGER } : {}) }), [reserve, available.stock, pantry, safeWater])
   const filterKey = params.get('filter')
   const active = useMemo(() => new Set(parseFilters(filterKey)), [filterKey])
   const query = params.get('q') ?? ''

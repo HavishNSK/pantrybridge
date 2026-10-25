@@ -1,0 +1,9 @@
+{
+  "strictness": 2,
+  "commentTypes": ["logic", "syntax"],
+  "autoReview": ["open", "push", "rebase"],
+  "statusCheck": true,
+  "autoApprove": { "enabled": false },
+  "ignorePatterns": "node_modules/**\ndist/**\ncoverage/**\ntest-results/**\nplaywright-report/**",
+  "instructions": "Review concrete correctness, security, data integrity, and user-facing regressions. Apply AGENTS.md and PRODUCT.md. Preserve the simple local-only demo flow. Report actionable findings with paths, impact, and verification suggestions; avoid cosmetic nitpicks."
+}
