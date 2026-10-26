@@ -4,7 +4,7 @@ Status: approved and implemented on October 25, 2026. Local demo approach select
 
 ## Intent
 
-Extend PantryBridge so food received from a pantry or bought at a store becomes confirmed inventory and up to three practical dinners for a household. Preserve the existing pantry, recipes, weekly planner, nutrition, and Arkansas support flows.
+Extend FullPlate so food received from a pantry or bought at a store becomes confirmed inventory and up to three practical dinners for a household. Preserve the existing pantry, recipes, weekly planner, nutrition, and Arkansas support flows.
 
 Success means a user can review a sample box or receipt, correct quantities, select household cooking constraints, and see dinners supported by the available stock. Insufficient food produces fewer suggestions and clear shortfalls.
 

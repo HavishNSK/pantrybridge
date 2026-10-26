@@ -14,7 +14,7 @@ function Masthead() {
   return (
     <header className="on-dark sticky top-0 z-40 bg-forest text-cream">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-4 px-4 sm:px-6">
-        <NavLink to="/" aria-label="PantryBridge home" className="rounded-md">
+        <NavLink to="/" aria-label="FullPlate home" className="rounded-md">
           <Wordmark />
         </NavLink>
         <span className="hidden md:inline condensed text-sm font-semibold uppercase tracking-[0.08em] text-cream/70 border-l border-cream/20 pl-4">

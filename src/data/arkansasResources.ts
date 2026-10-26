@@ -36,7 +36,7 @@ export const RESOURCES: Resource[] = [
   // Benefits programs (official information lives with the agency)
   {
     id: 'ar-snap', name: 'SNAP: apply through Access Arkansas', type: 'snap', official: true, counties: [],
-    description: 'Arkansas DHS takes SNAP applications online, by phone, or at a county DHS office. DHS decides eligibility; PantryBridge does not.',
+    description: 'Arkansas DHS takes SNAP applications online, by phone, or at a county DHS office. DHS decides eligibility; FullPlate does not.',
     url: 'https://access.arkansas.gov', phone: '1-855-372-1084', source: 'humanservices.arkansas.gov/apply-for-services', lastVerified: V,
   },
   {

@@ -71,7 +71,7 @@ function Can({ x, pack, ink, accent, label }: { x: number; pack: string; ink: st
   )
 }
 
-/** Static vector pantry shelf: crisp geometry in the PantryBridge palette. */
+/** Static vector pantry shelf: crisp geometry in the FullPlate palette. */
 export function StaticPantryFallback({ className }: { className?: string }) {
   return (
     <div className={`${className || 'relative h-full w-full'} overflow-hidden bg-cream`}>

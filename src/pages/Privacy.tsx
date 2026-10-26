@@ -10,7 +10,7 @@ export default function Privacy() {
         <section className="module" aria-labelledby="privacy-data">
           <ModuleTitle id="privacy-data">The information you enter</ModuleTitle>
           <p className="text-[15px] leading-relaxed">Your pantry ingredients and quantities, meal plan, household size, cooking preferences, budget, and shopping lists are used in this browser to suggest meals and plan groceries. The county you choose helps display food-support resources. There is no account or cloud sync.</p>
-          <p className="mt-3 text-[15px] leading-relaxed">PantryBridge never asks for an EBT card number, PIN, account login, or proof of hardship. You can use synthetic food-box and receipt samples without choosing a personal photo.</p>
+          <p className="mt-3 text-[15px] leading-relaxed">FullPlate never asks for an EBT card number, PIN, account login, or proof of hardship. You can use synthetic food-box and receipt samples without choosing a personal photo.</p>
         </section>
         <section className="module" aria-labelledby="privacy-photos">
           <ModuleTitle id="privacy-photos">Temporary photos and sample results</ModuleTitle>
@@ -26,7 +26,7 @@ export default function Privacy() {
         <section className="module" aria-labelledby="privacy-delete">
           <ModuleTitle id="privacy-delete">Your choices and deletion</ModuleTitle>
           <p className="text-[15px] leading-relaxed">Edit or remove individual pantry entries at any time. In Settings, “Clear all my data” empties saved pantry, plans, budget, and lists, resets household and cooking preferences, and removes the saved county. The app may retain an empty/default state record so you can start fresh. “Reset demo data” replaces your app data with samples; it is not the clearing action and keeps your county choice.</p>
-          <p className="mt-3 text-[15px] leading-relaxed">You can also remove this site's storage through your browser settings. Clearing PantryBridge does not delete the original photo or receipt file from your device.</p>
+          <p className="mt-3 text-[15px] leading-relaxed">You can also remove this site's storage through your browser settings. Clearing FullPlate does not delete the original photo or receipt file from your device.</p>
           <Link to="/settings" className="mt-3 inline-flex min-h-11 items-center font-semibold text-forest underline">Open Settings to manage your data</Link>
         </section>
         <section className="module" aria-labelledby="privacy-third-party">

@@ -1,10 +1,10 @@
-# PantryBridge Terms of Use — unpublished working draft
+# FullPlate Terms of Use — unpublished working draft
 
 Prepared October 25, 2026. **For owner review before publication. This document is not a published agreement and does not create an acceptance requirement in the app.** No completed legal review is claimed.
 
 ## Product description for review
 
-PantryBridge is a browser-based prototype for managing pantry inventory, reviewing synthetic photo/receipt samples, planning meals, estimating groceries and nutrition, and finding Arkansas food-assistance links. There are no accounts, payments, real recognition, or cloud synchronization. Selected photos are not analyzed or uploaded by the app.
+FullPlate is a browser-based prototype for managing pantry inventory, reviewing synthetic photo/receipt samples, planning meals, estimating groceries and nutrition, and finding Arkansas food-assistance links. There are no accounts, payments, real recognition, or cloud synchronization. Selected photos are not analyzed or uploaded by the app.
 
 Meal suggestions use a curated local recipe collection. Availability depends on confirmed amounts, household portions, equipment, time, and planning preferences. Suggestions do not establish that food is safe to eat or suitable for an individual's allergies or medical needs. Prices and nutrition are estimates. Assistance links do not establish eligibility or guarantee availability. The app is not affiliated with a government agency or food bank.
 
@@ -18,7 +18,7 @@ The owner must resolve these items before turning this draft into public terms:
 
 - Confirm the legal operator identity, service domain, and a working contact channel. None is invented here.
 - Confirm the intended audience and any appropriate age-related approach; no age restriction is assumed.
-- Establish permissions and licensing for app code, recipes, images, and other content. The template's CC0 license does not license PantryBridge itself.
+- Establish permissions and licensing for app code, recipes, images, and other content. The template's CC0 license does not license FullPlate itself.
 - Decide access/use permissions, acceptable-use terms, support expectations, and how changes or discontinuation will be communicated.
 - Obtain review of any proposed warranty disclaimer, liability limits, indemnity, dispute process, and governing law for the actual operator and audience. This draft chooses no state, arbitration clause, liability cap, or waiver.
 - Review applicable privacy obligations and hosting/log practices; identify any required request/contact process without claiming compliance in advance.

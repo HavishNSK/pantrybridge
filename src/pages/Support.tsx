@@ -150,7 +150,7 @@ export default function Support() {
               , by phone at <a href="tel:18553721084" className={`${linkClass} num`}>1-855-372-1084</a>, or at a county DHS office.
             </li>
             <li>The Arkansas Department of Human Services (DHS) decides eligibility and benefit amounts.</li>
-            <li>PantryBridge never asks for your EBT card number or PIN, and it can't check balances.</li>
+            <li>FullPlate never asks for your EBT card number or PIN, and it can't check balances.</li>
             <li>
               SNAP buys food for home preparation. It can't be used for household supplies, hot prepared foods, or non-food items.{' '}
               <a href="https://www.fns.usda.gov/snap/eligible-food-items" {...ext} className={`${linkClass} inline-flex items-center gap-1`}>

@@ -1,4 +1,4 @@
-# PantryBridge review priorities
+# FullPlate review priorities
 
 - Every required ingredient, including staples and zero-price water, needs confirmed stock or an explicitly confirmed resource. Never infer availability from rounded grocery costs.
 - Pantry stock and additional budgets must be allocated across all meals; preserve non-target plan entries and account for displaced leftover sources. Optional ingredients cannot consume stock required later.

@@ -93,7 +93,7 @@ export default function Settings() {
             Everything stays only on this device, in this browser: your pantry list, week plan, budget, shopping list, household size, cooking preferences, and the county you last picked on Find Food Support.
           </p>
           <p className="mt-2 text-sm leading-relaxed text-ink-2">
-            Your saved app data is not sent to a server by this demo. PantryBridge never asks for an EBT card number, PIN, or any account login. Photos you scan are not uploaded or analyzed.
+            Your saved app data is not sent to a server by this demo. FullPlate never asks for an EBT card number, PIN, or any account login. Photos you scan are not uploaded or analyzed.
           </p>
           <Link to="/privacy" className="mt-2 inline-flex min-h-11 items-center font-semibold text-forest underline">Read privacy &amp; storage information</Link>
         </section>
@@ -115,7 +115,7 @@ export default function Settings() {
               />
             </div>
             <div className="flex flex-col items-start gap-2">
-              <p className="text-[15px] text-ink-2">Remove everything PantryBridge has saved in this browser and start empty.</p>
+              <p className="text-[15px] text-ink-2">Remove everything FullPlate has saved in this browser and start empty.</p>
               <ConfirmAction
                 label="Clear all my data"
                 icon={<Trash2 size={17} aria-hidden="true" />}
@@ -148,9 +148,9 @@ export default function Settings() {
         </section>
 
         <section className="module" aria-labelledby="s-about">
-          <ModuleTitle id="s-about">About PantryBridge</ModuleTitle>
+          <ModuleTitle id="s-about">About FullPlate</ModuleTitle>
           <div className="space-y-2 text-[15px] leading-relaxed text-ink">
-            <p>PantryBridge helps Arkansas households make more from what they have: turn the food already on hand into meals, plan the week on a budget, and find food assistance without having to explain anything.</p>
+            <p>FullPlate helps Arkansas households make more from what they have: turn the food already on hand into meals, plan the week on a budget, and find food assistance without having to explain anything.</p>
             <p className="text-ink-2">Built as a student project in the spirit of the Congressional App Challenge, with an Arkansas focus. It is not affiliated with any government agency or food bank.</p>
             <p className="text-ink-2">Nutrition and cost figures are estimates and are not medical or dietary advice. Pantry scanning runs in demo mode: no vision model is connected.</p>
           </div>

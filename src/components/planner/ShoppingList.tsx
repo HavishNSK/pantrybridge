@@ -32,7 +32,7 @@ const PRINT_CSS = `
 function buildText(lines: ShoppingLine[], extras: ListItem[], checked: string[], total: number): string {
   const week = shortDate(weekOf())
   const box = (done: boolean) => (done ? '[x]' : '[ ]')
-  const out: string[] = [`PantryBridge shopping list (week of ${week})`, '', 'Food']
+  const out: string[] = [`FullPlate shopping list (week of ${week})`, '', 'Food']
   for (const l of lines) {
     const ing = INGREDIENT_BY_ID[l.ingredientId]
     out.push(`${box(checked.includes(l.ingredientId))} ${ing.name}: ${amountText(l.ingredientId, l.base)}, est. ${money(l.cost)} (for ${l.forRecipes.join(', ')})`)
@@ -205,7 +205,7 @@ function ExtraLine({ item, onToggle, onRemove }: { item: ListItem; onToggle: () 
 function PrintView({ lines, foodExtras, householdExtras, checked, total }: { lines: ShoppingLine[]; foodExtras: ListItem[]; householdExtras: ListItem[]; checked: string[]; total: number }) {
   return (
     <div>
-      <h1>PantryBridge shopping list</h1>
+      <h1>FullPlate shopping list</h1>
       <small>Week of {shortDate(weekOf())} · prices are estimates and vary by store</small>
       <h2>Food</h2>
       <ul>

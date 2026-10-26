@@ -31,7 +31,7 @@ Used at home, often on a phone, sometimes standing at a pantry shelf. A judge de
 - All demo data is visibly labeled.
 
 ## Brand Commitments
-- Name: **PantryBridge**. The mark is to be created (no existing assets).
+- Name: **FullPlate** (formerly PantryBridge; storage keys keep the `pantrybridge:` prefix). Mark: a cream plate with a leaf and a terracotta dot on a forest tile; wordmark "Full" in forest or cream with "Plate" in leaf.
 - Voice: warm, dignified, practical, never shaming. It never implies that poor planning causes food insecurity, and it should never read like a charity form or a government portal.
 - The user pinned this palette: forest #173F35, leaf #8DBF75, cream #F7F4EC, paper #FFFEFA, terracotta #D98566, charcoal #252C28.
 - Headline copy: "Make more from what you have." / "Discover nourishing meals, stretch your grocery budget, and make every ingredient count."

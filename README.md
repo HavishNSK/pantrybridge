@@ -1,8 +1,8 @@
-# PantryBridge
+# FullPlate
 
 **Make more from what you have.**
 
-PantryBridge helps Arkansas households turn food already on hand into meals, plan a week on a budget, and find food assistance without having to explain their circumstances.
+FullPlate helps Arkansas households turn food already on hand into meals, plan a week on a budget, and find food assistance without having to explain their circumstances.
 
 > Status: working frontend prototype. Photo scanning uses labeled sample results; no vision service is connected.
 
@@ -16,7 +16,7 @@ PantryBridge helps Arkansas households turn food already on hand into meals, pla
 - **Find Arkansas support:** browse regional food banks and SNAP, WIC, Summer EBT, and other support links. Resource records include sources and verification dates.
 - **Try the demo:** explore a sample pantry and suggested week, restore demo data, or clear saved data from Settings.
 
-Recipes are deterministic and locally bundled. Grocery prices and nutrition figures are estimates. PantryBridge does not determine benefit eligibility, check EBT balances, or collect EBT card numbers, PINs, or credentials. It is not affiliated with a government agency or food bank.
+Recipes are deterministic and locally bundled. Grocery prices and nutrition figures are estimates. FullPlate does not determine benefit eligibility, check EBT balances, or collect EBT card numbers, PINs, or credentials. It is not affiliated with a government agency or food bank.
 
 ## Quick start
 

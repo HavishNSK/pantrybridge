@@ -5,7 +5,7 @@ primary_target: "src/pages/Overview.tsx"
 related_targets: ["src/App.tsx"]
 ---
 
-Scope: the whole PantryBridge app shell + Overview dashboard (route `/`), inherited by My Pantry, Scan, Recipes, Planner, Nutrition, Support. Mode: operate.
+Scope: the whole FullPlate app shell + Overview dashboard (route `/`), inherited by My Pantry, Scan, Recipes, Planner, Nutrition, Support. Mode: operate.
 
 Audience/job: judges in a 5-second demo; Arkansas households doing scan → meals → week plan/budget → support. Constraints: PRODUCT.md (demo labels, estimates, no EBT data).
 
